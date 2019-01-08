@@ -36,6 +36,8 @@ public class LotteryService {
         if (participantService.participantExists(participantId)) {
             lotteryStrorage.get(lotteryId).setAddedParticipants(participantId);
         }
-
+    }
+    public boolean lotteryExist(Long id){
+        return lotteryStrorage.containsKey(id);
     }
 }
