@@ -1,15 +1,42 @@
 package lv.inache.projectLottery.lottery;
 
+import lv.inache.projectLottery.participant.Participant;
+
+import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "NCH_LOTTERIES")
 public class Lottery {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "title")
     private String title;
-    private Long limit;
-    private Long addedParticipants;
+    @Column(name = "participantsLimit")
+    private Long participantsLimit;
+    @Column(name = "status")
+    private String status;
+    @Column(name = "startDate")
+    private Date startDate;
+    @Column(name = "endDate")
+    private Date endDate;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_participant_id")
+    private Participant participant;
 
     public Lottery() {
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public Long getId() {
@@ -28,21 +55,37 @@ public class Lottery {
         this.title = title;
     }
 
-    public Long getLimit() {
-        return limit;
+    public Long getParticipantsLimit() {
+        return participantsLimit;
     }
 
-    public void setLimit(Long limit) {
-        this.limit = limit;
+    public void setParticipantsLimit(Long limit) {
+        this.participantsLimit = limit;
     }
 
 
-    public Long getAddedParticipants() {
-        return addedParticipants;
+    public String getStatus() {
+        return status;
     }
 
-    public void setAddedParticipants(Long addedParticipants) {
-        this.addedParticipants = addedParticipants;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -52,14 +95,17 @@ public class Lottery {
         Lottery lottery = (Lottery) o;
         return Objects.equals(getId(), lottery.getId()) &&
                 Objects.equals(getTitle(), lottery.getTitle()) &&
-                Objects.equals(getLimit(), lottery.getLimit()) &&
-                Objects.equals(getAddedParticipants(), lottery.getAddedParticipants());
+                Objects.equals(getParticipantsLimit(), lottery.getParticipantsLimit()) &&
+                Objects.equals(getStatus(), lottery.getStatus()) &&
+                Objects.equals(getStartDate(), lottery.getStartDate()) &&
+                Objects.equals(getEndDate(), lottery.getEndDate()) &&
+                Objects.equals(getParticipant(), lottery.getParticipant());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getTitle(), getLimit(), getAddedParticipants());
+        return Objects.hash(getId(), getTitle(), getParticipantsLimit(), getStatus(), getStartDate(), getEndDate(), getParticipant());
     }
 
     @Override
@@ -67,9 +113,11 @@ public class Lottery {
         return "Lottery{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", limit=" + limit +
-                ", addedParticipants='" + addedParticipants + '\'' +
+                ", limit=" + participantsLimit +
+                ", status='" + status + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", participant=" + participant +
                 '}';
     }
-
 }

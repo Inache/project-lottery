@@ -25,12 +25,11 @@ public class ParticipantController {
     @PostMapping(value = "/register")
     public ResponseEntity add(@RequestBody Participant participant) {
         LOGGER.info("Adding participant");
-        if (participant.getAge() <= 21 || participant.getAge().equals(null)){
+        if (participant.getAge() <= 21 || participant.getAge().equals(null)) {
             LOGGER.info("Adding participant: failed");
             return ResponseEntity.badRequest().body("status:Fail,\n" +
                     "reason: Age must be > 21");
-        }
-        else {
+        } else {
             LOGGER.info("Adding participant: success");
             participantService.add(participant);
             return ResponseEntity.ok(HttpStatus.OK);

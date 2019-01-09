@@ -1,22 +1,31 @@
 package lv.inache.projectLottery.participant;
 
+import lv.inache.projectLottery.lottery.Lottery;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "NCH_PARTICIPANTS")
 public class Participant {
-
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private Long id;
+    @Column(name = "email", unique = true)
+    @NotBlank
     private String email;
+    @Column(name = "age")
     private Byte age;
+    @Column(name = "code")
     private String code;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
+    private List<Lottery> lotteries;
+
 
     public Participant() {
-    }
-
-    public Participant(Long id, String email, Byte age, String code) {
-        this.id = id;
-        this.email = email;
-        this.age = age;
-        this.code = code;
     }
 
     public Long getId() {
@@ -51,6 +60,14 @@ public class Participant {
         this.code = code;
     }
 
+    public List<Lottery> getLotteries() {
+        return lotteries;
+    }
+
+    public void setLotteries(List<Lottery> lotteries) {
+        this.lotteries = lotteries;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,13 +76,14 @@ public class Participant {
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getEmail(), that.getEmail()) &&
                 Objects.equals(getAge(), that.getAge()) &&
-                Objects.equals(getCode(), that.getCode());
+                Objects.equals(getCode(), that.getCode()) &&
+                Objects.equals(getLotteries(), that.getLotteries());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getAge(), getCode());
+        return Objects.hash(getId(), getEmail(), getAge(), getCode(), getLotteries());
     }
 
     @Override
@@ -75,6 +93,7 @@ public class Participant {
                 ", email='" + email + '\'' +
                 ", age=" + age +
                 ", code='" + code + '\'' +
+                ", lotteries=" + lotteries +
                 '}';
     }
 }
