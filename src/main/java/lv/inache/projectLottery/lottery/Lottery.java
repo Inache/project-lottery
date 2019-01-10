@@ -3,6 +3,7 @@ package lv.inache.projectLottery.lottery;
 import lv.inache.projectLottery.participant.Participant;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,30 +14,31 @@ public class Lottery {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Long id;
-    @Column(name = "title")
+    @Column(name = "title",unique = true)
+    @NotBlank
     private String title;
-    @Column(name = "participantsLimit")
+    @Column(name = "participantslimit")
     private Long participantsLimit;
     @Column(name = "status")
     private String status;
-    @Column(name = "startDate")
+    @Column(name = "startdate")
     private Date startDate;
-    @Column(name = "endDate")
+    @Column(name = "enddate")
     private Date endDate;
 
     @ManyToOne
     @JoinColumn(name = "assigned_participant_id")
-    private Participant participant;
+    private Participant participants;
 
     public Lottery() {
     }
 
-    public Participant getParticipant() {
-        return participant;
+    public Participant getParticipants() {
+        return participants;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public void setParticipants(Participant participant) {
+        this.participants = participant;
     }
 
     public Long getId() {
@@ -99,13 +101,13 @@ public class Lottery {
                 Objects.equals(getStatus(), lottery.getStatus()) &&
                 Objects.equals(getStartDate(), lottery.getStartDate()) &&
                 Objects.equals(getEndDate(), lottery.getEndDate()) &&
-                Objects.equals(getParticipant(), lottery.getParticipant());
+                Objects.equals(getParticipants(), lottery.getParticipants());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getTitle(), getParticipantsLimit(), getStatus(), getStartDate(), getEndDate(), getParticipant());
+        return Objects.hash(getId(), getTitle(), getParticipantsLimit(), getStatus(), getStartDate(), getEndDate(), getParticipants());
     }
 
     @Override
@@ -117,7 +119,7 @@ public class Lottery {
                 ", status='" + status + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", participant=" + participant +
+                ", participant=" + participants +
                 '}';
     }
 }

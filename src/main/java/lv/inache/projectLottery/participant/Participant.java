@@ -21,7 +21,7 @@ public class Participant {
     private Byte age;
     @Column(name = "code")
     private String code;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participants")
     private List<Lottery> lotteries;
 
 

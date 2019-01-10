@@ -1,29 +1,40 @@
 package lv.inache.projectLottery.participant;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ParticipantService {
-    private Map<Long, Participant> participantMap = new HashMap<>();
-    private Long lastId = 1L;
+    private final ParticipantDaoImplementation participantDaoImplementation;
+
+    @Autowired
+    public ParticipantService(ParticipantDaoImplementation participantDaoImplementation) {
+        this.participantDaoImplementation = participantDaoImplementation;
+    }
 
     public Long add(Participant participant) {
-        lastId++;
-        participant.setId(lastId);
-        participantMap.put(lastId, participant);
-        return lastId;
+        return participantDaoImplementation.insert(participant);
     }
 
-    public boolean participantExists(Long id) {
-        return participantMap.containsKey(id);
-    }
 
     public List<Participant> participants() {
-        return new ArrayList<>(participantMap.values());
+        List<Participant> participants = participantDaoImplementation.getAll();
+        return participants;
+    }
+
+    public Optional<Participant> get(Long id) {
+        return participantDaoImplementation.getById(id);
+    }
+
+    public void delete(Long id) {
+        participantDaoImplementation.delete(id);
+    }
+
+    public void update(Long id, Participant participant) {
+        participant.setId(id);
+        participantDaoImplementation.update(participant);
     }
 }
+

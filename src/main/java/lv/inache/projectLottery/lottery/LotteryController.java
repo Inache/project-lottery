@@ -11,40 +11,48 @@ import java.util.Collection;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/lotteries")
 public class LotteryController {
     private final static Logger LOGGER = LoggerFactory.getLogger(LotteryController.class);
 
     @Autowired
     LotteryService lotteryService;
 
-    @GetMapping(value = "/lotteries")
+    @GetMapping
     public Collection<Lottery> get() {
-        LOGGER.info("Get lottery request");
+        LOGGER.info("Get task request");
         return lotteryService.get();
     }
 
     @GetMapping(value = "/{id}")
-    public Optional<Lottery> getById(@PathVariable Long id){
+    public Optional<Lottery> getById(@PathVariable Long id) {
         return lotteryService.get(id);
     }
 
     @PostMapping
-    public void create(@RequestBody Lottery lottery){
+    public void create(@RequestBody Lottery lottery) {
         lotteryService.addLottery(lottery);
     }
 
+    @DeleteMapping
+    public boolean delete(@RequestParam(value = "lotteryId") Long id) {
+        return lotteryService.deleteLottery(id);
+    }
+
     @PutMapping("/{id}")
-    public boolean update(@PathVariable Long id, @RequestBody Lottery lottery){
+    public boolean update(@PathVariable Long id, @RequestBody Lottery lottery) {
         lottery.setId(id);
         return lotteryService.update(lottery);
     }
 
-
-
-    @PutMapping(value = "/assign", produces = MediaType.APPLICATION_JSON_VALUE)
-    public boolean assign(@RequestParam(name = "lotteryId") Long lotteryId, @RequestParam Long userId){
-        return lotteryService.addParticipant(lotteryId, userId);
+    @PutMapping(value = "/assign")
+    public boolean assign(@RequestParam Long lotteryId, @RequestParam Long participantId) {
+        return lotteryService.assign(lotteryId, participantId);
     }
+//    @PutMapping(value = "/assign", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public boolean assign(@RequestParam(name = "lotteryId") Long lotteryId, @RequestParam Long userId){
+//        return lotteryService.addParticipant(lotteryId, userId);
+//    }
 
 //    @PostMapping(value = "/createLottery")
 //    public void createLottery(@RequestBody Lottery lottery) {
