@@ -23,9 +23,8 @@ public class ParticipantService {
     }
 
 
-    public List<Participant> participants() {
-        List<Participant> participants = participantDao.getAll();
-        return participants;
+    public List<Participant> get() {
+        return participantDao.getAll();
     }
 
     public Optional<Participant> get(Long id) {
@@ -58,6 +57,14 @@ public class ParticipantService {
     public void update(Long id, Participant participant) {
         participant.setId(id);
         participantDao.update(participant);
+    }
+
+    private String generateCode(){
+        //Generate8lastnumbers
+        return "";
+    }
+    private void sendCodeAtEmail(Participant participant, String code){
+        //
     }
 }
 

@@ -5,7 +5,12 @@ import lv.inache.projectLottery.lottery.LotteryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.Optional;
+
 
 @RestController
 public class ParticipantController {
@@ -27,5 +32,16 @@ public class ParticipantController {
     @GetMapping(value = "/status")
     public void getStatus(@RequestParam Long id, @RequestParam String email, @RequestParam String code){
 
+    }
+
+    @GetMapping(value = "/participants")
+    public Collection<Participant> get(){
+        LOGGER.info("Getting all lotteries");
+        return participantService.get();
+    }
+
+    @GetMapping(value = "/participants/{id}")
+    public Optional<Participant> getById(@PathVariable Long id){
+        return participantService.get(id);
     }
 }

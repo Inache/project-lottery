@@ -21,9 +21,9 @@ public class Participant {
     private Byte age;
     @Column(name = "code", unique = true)
     private String code;
-    @Column(name = "registered_to_lottery_with_id")
+    @Column(name = "lotteryId")
     private Long lotteryId;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participants")
+    @ManyToOne(fetch = FetchType.EAGER)
     private List<Lottery> lotteries;
 
 

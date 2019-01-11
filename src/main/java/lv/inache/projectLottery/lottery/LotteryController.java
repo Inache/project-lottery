@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Optional;
+
 @RestController
 public class LotteryController {
     private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantController.class);
@@ -31,18 +34,31 @@ public class LotteryController {
         lotteryService.startRegistration(lottery);
         return new LotteryResponse("OK", lottery.getId());
     }
-    @PostMapping(value = "/stop-registration")
-    public void stopRegistration(@RequestBody Long id){
-        LOGGER.info("stop-registration");
-        //TODO
+    @PutMapping(value = "/stop-registration/{id}")
+    public void stopRegistration(@PathVariable Long id){
+        LOGGER.info("stop-registration for lottery with id: " + id);
+        lotteryService.stopRegistration(id);
     }
-    @PostMapping(value = "/choose-winner")
-    public void chooseWinner(@RequestBody Long id){
+    @PutMapping(value = "/choose-winner/{id}")
+    public void chooseWinner(@PathVariable Long id){
         LOGGER.info("choose-winner");
-        //TODO
+        lotteryService.chooseWinnerCode(id);
     }
     @GetMapping(value = "/stats")
     public void statistics(@RequestBody Lottery lottery){
         LOGGER.info("Getting stats");
+
+    }
+
+    @GetMapping(value = "/lotteries")
+    public Collection<Lottery> getAllLotteries(){
+        LOGGER.info("Getting all lotteries");
+        return lotteryService.get();
+    }
+
+    @GetMapping(value = "/lotteries/{id}")
+    public Optional<Lottery> getById(@PathVariable Long id){
+        System.out.println(lotteryService.get(id));
+        return lotteryService.get(id);
     }
 }

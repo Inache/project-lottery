@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class LotteryService {
@@ -29,10 +30,31 @@ public class LotteryService {
         lotteryDao.insert(lottery);
     }
 
-    public void stopRegistration(Lottery lottery){
-        lottery.setEndDate(new Date());
-        lottery.setRegistrationIsAvailable(false);
-        lotteryDao.update(lottery);
+    public void stopRegistration(Long id) {
+        Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
+        Lottery lottery;
+        if (wrappedLottery.isPresent()) {
+            lottery = wrappedLottery.get();
+            lottery.setRegistrationIsAvailable(false);
+            lottery.setEndDate(new Date());
+            lotteryDao.update(lottery);
+        } else {
+            System.out.println("Lottery with " + id + "dont exist");
+        }
+    }
+
+    public void chooseWinnerCode(Long id){
+        Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
+        Lottery lottery;
+        if (wrappedLottery.isPresent()){
+            lottery = wrappedLottery.get();
+            Random random = new Random();
+            Integer winner = random.nextInt(lottery.getParticipants().size());
+            String winnerCode = lottery.getParticipants().get(winner -1 ).getCode();
+            System.out.println("WINNERCODE IS: ");
+
+        }
+
     }
 
     public boolean deleteLottery(Long id) {

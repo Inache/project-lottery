@@ -5,6 +5,7 @@ import lv.inache.projectLottery.participant.Participant;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.Objects;
 public class Lottery {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @Column(name = "id", unique = true)
     private Long id;
     @Column(name = "title", unique = true)
     @NotBlank
@@ -26,18 +27,18 @@ public class Lottery {
     @Column(name = "enddate")
     private Date endDate;
 
-    @ManyToOne
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "participants")
     @JoinColumn(name = "assigned_participant_id")
-    private Participant participants;
+    private List<Participant> participants;
 
     public Lottery() {
     }
 
-    public Participant getParticipants() {
+    public List<Participant> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Participant participant) {
+    public void setParticipants(List participant) {
         this.participants = participant;
     }
 
