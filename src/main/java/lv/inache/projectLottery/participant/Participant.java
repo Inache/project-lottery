@@ -1,5 +1,7 @@
 package lv.inache.projectLottery.participant;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lv.inache.projectLottery.lottery.Lottery;
 
 import javax.persistence.*;
@@ -23,19 +25,20 @@ public class Participant {
     private String code;
     @Column(name = "lotteryId")
     private Long lotteryId;
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lotteries")
-//    private List<Lottery> lotteries;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
+    @JsonIgnore
+    private List<Lottery> lotteries;
 
 
     public Participant() {
     }
 
-    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId) {
+    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId, List<Lottery> lotteries) {
         this.email = email;
         this.age = age;
         this.code = code;
         this.lotteryId = lotteryId;
-
+        this.lotteries = lotteries;
     }
 
     @Override
@@ -47,14 +50,14 @@ public class Participant {
                 Objects.equals(email, that.email) &&
                 Objects.equals(age, that.age) &&
                 Objects.equals(code, that.code) &&
-                Objects.equals(lotteryId, that.lotteryId);
-
+                Objects.equals(lotteryId, that.lotteryId) &&
+                Objects.equals(lotteries, that.lotteries);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, age, code, lotteryId);
+        return Objects.hash(id, email, age, code, lotteryId, lotteries);
     }
 
     public long getId() {
@@ -97,5 +100,11 @@ public class Participant {
         this.lotteryId = lotteryId;
     }
 
+    public List<Lottery> getLotteries() {
+        return lotteries;
+    }
 
+    public void setLotteries(List<Lottery> lotteries) {
+        this.lotteries = lotteries;
+    }
 }

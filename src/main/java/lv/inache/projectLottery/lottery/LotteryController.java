@@ -1,5 +1,6 @@
 package lv.inache.projectLottery.lottery;
 
+import lv.inache.projectLottery.lottery.lotteryResponses.StartRegistrationResponse;
 import lv.inache.projectLottery.participant.ParticipantController;
 import lv.inache.projectLottery.participant.ParticipantService;
 import org.slf4j.Logger;
@@ -29,10 +30,10 @@ public class LotteryController {
 //        LOGGER.info("Lottery" + lottery.getTitle() + "created.");
 //    }
     @PostMapping(value = "/start-registration")
-    public LotteryResponse startRegistration(@RequestBody Lottery lottery) {
+    public void startRegistration(@RequestBody Lottery lottery) {
         LOGGER.info("start-registration");
         lotteryService.startRegistration(lottery);
-        return new LotteryResponse("OK", lottery.getId());
+
     }
     @PutMapping(value = "/stop-registration/{id}")
     public void stopRegistration(@PathVariable Long id){

@@ -1,20 +1,19 @@
-package lv.inache.projectLottery.lottery;
+package lv.inache.projectLottery.lottery.lotteryResponses;
 
-public class LotteryResponse {
+public class StartRegistrationResponse {
     private String status;
     private Long id;
     private String reason;
 
-
-    public LotteryResponse(String status, Long id) {
+    public StartRegistrationResponse(String status, Long id) {
         this.status = status;
         this.id = id;
     }
-
-    public LotteryResponse(String status, String reason) {
-        this.status = status;
+    public StartRegistrationResponse(String status, String reason){
+        this.status = "Fail";
         this.reason = reason;
     }
+
 
     public String getStatus() {
         return status;

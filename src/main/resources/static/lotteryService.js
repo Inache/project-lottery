@@ -15,14 +15,31 @@ function addLottery(lottery) {
         <td>${lottery.id}</td>
         <td>${lottery.title}</td>
         <td>${lottery.participantsLimit}</td>
-        <td>${lottery.status}</td>
+        <td>${lottery.registrationIsAvailable}</td>
         <td>${lottery.startDate}</td>
         <td>${lottery.endDate}</td>
+        <td>${lottery.winnerCode}</td>
         <td>${lottery.assigned_participant_id}</td>
+        <td>
+       
+        <button class="btn btn-primary" onclick="stopRegistration(${lottery.id})">STOP</button>
+    
+        </td>
     `;
     document.getElementById("table-body").appendChild(tr);
 }
 
+function stopRegistration(id) {
+    fetch("/stop-registration/" + id,{
+        method: "put",
+        headers:{
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    }).then(()=>{
+        window.location.reload();
+    });
+
+}
 // <td>${lottery.participant ? lottery.participant.email + " " + lottery.participant.code: ""}</td>
 function saveCredentials() {
 
@@ -31,18 +48,17 @@ function saveCredentials() {
 function createLottery() {
     const title = document.getElementById("title").value;
     const participantsLimit = document.getElementById("participantsLimit").value;
-    fetch("/lotteries", {
+    fetch("/start-registration", {
         method: "post",
         body: JSON.stringify({
             title: title,
             participantsLimit: participantsLimit,
-            status:'default'
         }),
         headers:{
             "Content-Type": "application/json;charset=UTF-8"
         }
     }).then(()=>{
-        window.location.href = "/lotteries.html"
+        window.location.href = "/lotteryList.html"
     });
 }
 

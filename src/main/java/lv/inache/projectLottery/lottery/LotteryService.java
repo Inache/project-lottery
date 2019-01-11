@@ -1,5 +1,6 @@
 package lv.inache.projectLottery.lottery;
 
+import lv.inache.projectLottery.lottery.lotteryResponses.StartRegistrationResponse;
 import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class LotteryService {
         lottery.setStartDate(new Date());
         lottery.setRegistrationIsAvailable(true);
         lotteryDao.insert(lottery);
+
     }
 
     public void stopRegistration(Long id) {

@@ -5,7 +5,6 @@ import lv.inache.projectLottery.participant.Participant;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,10 +14,10 @@ public class Lottery {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", unique = true)
     private Long id;
-    @Column(name = "title", unique = true)
+    @Column(name = "title")
     @NotBlank
     private String title;
-    @Column(name = "participantslimit")
+    @Column(name = "participantsLimit")
     private Long participantsLimit;
     @Column(name = "registrationIsAvailable")
     private boolean registrationIsAvailable;
@@ -26,40 +25,24 @@ public class Lottery {
     private Date startDate;
     @Column(name = "enddate")
     private Date endDate;
+    @Column(name = "winnerCode")
+    private String winnerCode;
 
-//    @ManyToOne
-//    @JoinColumn(name = "assigned_participant_id")
-//    private Participant participants;
+    @ManyToOne
+    @JoinColumn(name = "assigned_user_id")
+    private Participant participant;
 
     public Lottery() {
     }
 
-    public Lottery(@NotBlank String title, Long participantsLimit, boolean registrationIsAvailable, Date startDate, Date endDate) {
+    public Lottery(@NotBlank String title, Long participantsLimit, boolean registrationIsAvailable, Date startDate, Date endDate, String winnerCode, Participant participant) {
         this.title = title;
         this.participantsLimit = participantsLimit;
         this.registrationIsAvailable = registrationIsAvailable;
         this.startDate = startDate;
         this.endDate = endDate;
-
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Lottery lottery = (Lottery) o;
-        return registrationIsAvailable == lottery.registrationIsAvailable &&
-                Objects.equals(id, lottery.id) &&
-                Objects.equals(title, lottery.title) &&
-                Objects.equals(participantsLimit, lottery.participantsLimit) &&
-                Objects.equals(startDate, lottery.startDate) &&
-                Objects.equals(endDate, lottery.endDate);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, title, participantsLimit, registrationIsAvailable, startDate, endDate);
+        this.winnerCode = winnerCode;
+        this.participant = participant;
     }
 
     public Long getId() {
@@ -82,8 +65,8 @@ public class Lottery {
         return participantsLimit;
     }
 
-    public void setParticipantsLimit(Long participantsLimit) {
-        this.participantsLimit = participantsLimit;
+    public void setParticipantsLimit(Long limit) {
+        this.participantsLimit = limit;
     }
 
     public boolean isRegistrationIsAvailable() {
@@ -110,18 +93,54 @@ public class Lottery {
         this.endDate = endDate;
     }
 
+    public String getWinnerCode() {
+        return winnerCode;
+    }
 
+    public void setWinnerCode(String winnerCode) {
+        this.winnerCode = winnerCode;
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lottery lottery = (Lottery) o;
+        return isRegistrationIsAvailable() == lottery.isRegistrationIsAvailable() &&
+                Objects.equals(getId(), lottery.getId()) &&
+                Objects.equals(getTitle(), lottery.getTitle()) &&
+                Objects.equals(getParticipantsLimit(), lottery.getParticipantsLimit()) &&
+                Objects.equals(getStartDate(), lottery.getStartDate()) &&
+                Objects.equals(getEndDate(), lottery.getEndDate()) &&
+                Objects.equals(getWinnerCode(), lottery.getWinnerCode()) &&
+                Objects.equals(getParticipant(), lottery.getParticipant());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getTitle(), getParticipantsLimit(), isRegistrationIsAvailable(), getStartDate(), getEndDate(), getWinnerCode(), getParticipant());
+    }
 
     @Override
     public String toString() {
         return "Lottery{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", participantsLimit=" + participantsLimit +
+                ", limit=" + participantsLimit +
                 ", registrationIsAvailable=" + registrationIsAvailable +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", winnerCode='" + winnerCode + '\'' +
+                ", participant=" + participant +
                 '}';
     }
 }
-
