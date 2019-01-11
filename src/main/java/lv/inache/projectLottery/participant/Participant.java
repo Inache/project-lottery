@@ -23,19 +23,19 @@ public class Participant {
     private String code;
     @Column(name = "lotteryId")
     private Long lotteryId;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private List<Lottery> lotteries;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lotteries")
+//    private List<Lottery> lotteries;
 
 
     public Participant() {
     }
 
-    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId, List<Lottery> lotteries) {
+    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId) {
         this.email = email;
         this.age = age;
         this.code = code;
         this.lotteryId = lotteryId;
-        this.lotteries = lotteries;
+
     }
 
     @Override
@@ -43,18 +43,18 @@ public class Participant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return getId() == that.getId() &&
-                Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getAge(), that.getAge()) &&
-                Objects.equals(getCode(), that.getCode()) &&
-                Objects.equals(getLotteryId(), that.getLotteryId()) &&
-                Objects.equals(getLotteries(), that.getLotteries());
+        return id == that.id &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(age, that.age) &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(lotteryId, that.lotteryId);
+
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getEmail(), getAge(), getCode(), getLotteryId(), getLotteries());
+        return Objects.hash(id, email, age, code, lotteryId);
     }
 
     public long getId() {
@@ -97,11 +97,5 @@ public class Participant {
         this.lotteryId = lotteryId;
     }
 
-    public List<Lottery> getLotteries() {
-        return lotteries;
-    }
 
-    public void setLotteries(List<Lottery> lotteries) {
-        this.lotteries = lotteries;
-    }
 }

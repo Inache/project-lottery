@@ -49,9 +49,6 @@ public class LotteryService {
         if (wrappedLottery.isPresent()){
             lottery = wrappedLottery.get();
             Random random = new Random();
-            Integer winner = random.nextInt(lottery.getParticipants().size());
-            String winnerCode = lottery.getParticipants().get(winner -1 ).getCode();
-            System.out.println("WINNERCODE IS: ");
 
         }
 
