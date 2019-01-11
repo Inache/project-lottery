@@ -29,6 +29,12 @@ public class LotteryService {
         lotteryDao.insert(lottery);
     }
 
+    public void stopRegistration(Lottery lottery){
+        lottery.setEndDate(new Date());
+        lottery.setRegistrationIsAvailable(false);
+        lotteryDao.update(lottery);
+    }
+
     public boolean deleteLottery(Long id) {
         if (lotteryDao.getById(id, Lottery.class).isPresent()) {
             lotteryDao.delete(id, Lottery.class);

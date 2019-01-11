@@ -5,9 +5,7 @@ import lv.inache.projectLottery.participant.ParticipantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LotteryController {
@@ -32,5 +30,19 @@ public class LotteryController {
         LOGGER.info("start-registration");
         lotteryService.startRegistration(lottery);
         return new LotteryResponse("OK", lottery.getId());
+    }
+    @PostMapping(value = "/stop-registration")
+    public void stopRegistration(@RequestBody Long id){
+        LOGGER.info("stop-registration");
+        //TODO
+    }
+    @PostMapping(value = "/choose-winner")
+    public void chooseWinner(@RequestBody Long id){
+        LOGGER.info("choose-winner");
+        //TODO
+    }
+    @GetMapping(value = "/stats")
+    public void statistics(@RequestBody Lottery lottery){
+        LOGGER.info("Getting stats");
     }
 }
