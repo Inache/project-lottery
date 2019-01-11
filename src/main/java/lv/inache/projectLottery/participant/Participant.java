@@ -11,16 +11,18 @@ import java.util.Objects;
 @Table(name = "NCH_PARTICIPANTS")
 public class Participant {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    private Long id;
+    private long id;
     @Column(name = "email", unique = true)
     @NotBlank
     private String email;
     @Column(name = "age")
     private Byte age;
-    @Column(name = "code")
+    @Column(name = "code", unique = true)
     private String code;
+    @Column(name = "registered_to_lottery_with_id")
+    private Long lotteryId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "participants")
     private List<Lottery> lotteries;
 
@@ -28,11 +30,38 @@ public class Participant {
     public Participant() {
     }
 
-    public Long getId() {
+    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId, List<Lottery> lotteries) {
+        this.email = email;
+        this.age = age;
+        this.code = code;
+        this.lotteryId = lotteryId;
+        this.lotteries = lotteries;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Participant that = (Participant) o;
+        return getId() == that.getId() &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getAge(), that.getAge()) &&
+                Objects.equals(getCode(), that.getCode()) &&
+                Objects.equals(getLotteryId(), that.getLotteryId()) &&
+                Objects.equals(getLotteries(), that.getLotteries());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getEmail(), getAge(), getCode(), getLotteryId(), getLotteries());
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -60,40 +89,19 @@ public class Participant {
         this.code = code;
     }
 
+    public Long getLotteryId() {
+        return lotteryId;
+    }
+
+    public void setLotteryId(Long lotteryId) {
+        this.lotteryId = lotteryId;
+    }
+
     public List<Lottery> getLotteries() {
         return lotteries;
     }
 
     public void setLotteries(List<Lottery> lotteries) {
         this.lotteries = lotteries;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Participant that = (Participant) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getAge(), that.getAge()) &&
-                Objects.equals(getCode(), that.getCode()) &&
-                Objects.equals(getLotteries(), that.getLotteries());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId(), getEmail(), getAge(), getCode(), getLotteries());
-    }
-
-    @Override
-    public String toString() {
-        return "Participant{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", age=" + age +
-                ", code='" + code + '\'' +
-                ", lotteries=" + lotteries +
-                '}';
     }
 }

@@ -14,13 +14,13 @@ public class Lottery {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Long id;
-    @Column(name = "title",unique = true)
+    @Column(name = "title", unique = true)
     @NotBlank
     private String title;
     @Column(name = "participantslimit")
     private Long participantsLimit;
-    @Column(name = "status")
-    private String status;
+    @Column(name = "registrationIsAvailable")
+    private boolean registrationIsAvailable;
     @Column(name = "startdate")
     private Date startDate;
     @Column(name = "enddate")
@@ -66,12 +66,12 @@ public class Lottery {
     }
 
 
-    public String getStatus() {
-        return status;
+    public boolean getRegistrationIsAvailable() {
+        return registrationIsAvailable;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRegistrationIsAvailable(boolean registrationIsAvailable) {
+        this.registrationIsAvailable = registrationIsAvailable;
     }
 
     public Date getStartDate() {
@@ -98,7 +98,7 @@ public class Lottery {
         return Objects.equals(getId(), lottery.getId()) &&
                 Objects.equals(getTitle(), lottery.getTitle()) &&
                 Objects.equals(getParticipantsLimit(), lottery.getParticipantsLimit()) &&
-                Objects.equals(getStatus(), lottery.getStatus()) &&
+                Objects.equals(getRegistrationIsAvailable(), lottery.getRegistrationIsAvailable()) &&
                 Objects.equals(getStartDate(), lottery.getStartDate()) &&
                 Objects.equals(getEndDate(), lottery.getEndDate()) &&
                 Objects.equals(getParticipants(), lottery.getParticipants());
@@ -107,7 +107,7 @@ public class Lottery {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getTitle(), getParticipantsLimit(), getStatus(), getStartDate(), getEndDate(), getParticipants());
+        return Objects.hash(getId(), getTitle(), getParticipantsLimit(), getRegistrationIsAvailable(), getStartDate(), getEndDate(), getParticipants());
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Lottery {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", limit=" + participantsLimit +
-                ", status='" + status + '\'' +
+                ", registrationIsAvailable='" + registrationIsAvailable + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", participant=" + participants +

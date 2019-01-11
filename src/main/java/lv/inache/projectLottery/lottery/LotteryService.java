@@ -1,6 +1,5 @@
 package lv.inache.projectLottery.lottery;
 
-import lv.inache.projectLottery.participant.Participant;
 import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,16 +11,22 @@ import java.util.Optional;
 @Service
 public class LotteryService {
     private final LotteryDaoImplementation lotteryDao;
+    private final ParticipantDaoImplementation participantDao;
 
     @Autowired
-    public LotteryService(LotteryDaoImplementation lotteryDao) {
+    public LotteryService(LotteryDaoImplementation lotteryDao, ParticipantDaoImplementation participantDao) {
         this.lotteryDao = lotteryDao;
+        this.participantDao = participantDao;
     }
+// TODO:Разобраться отдельно или нет создается и запускается лоттерея.
+//    public void createLottery(Lottery lottery) {
+//        lotteryDao.insert(lottery);
+//    }
 
-
-    public Long addLottery(Lottery lottery){
+    public void startRegistration(Lottery lottery) {
         lottery.setStartDate(new Date());
-        return lotteryDao.insert(lottery);
+        lottery.setRegistrationIsAvailable(true);
+        lotteryDao.insert(lottery);
     }
 
     public boolean deleteLottery(Long id) {
