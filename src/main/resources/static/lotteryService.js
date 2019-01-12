@@ -40,7 +40,6 @@ function stopRegistration(id) {
     });
 
 }
-// <td>${lottery.participant ? lottery.participant.email + " " + lottery.participant.code: ""}</td>
 function saveCredentials() {
 
 }

@@ -18,7 +18,7 @@ function addLottery(lottery) {
         <td>${lottery.participantsLimit}</td>
         <td>
        
-        <button class="btn btn-primary" onclick="registerToLottery(${lottery.id})">Register To Lottery</button>
+        <button class="btn btn-primary" onclick="openRegistrationWindow(${lottery.id})">Register To Lottery</button>
     
         </td>
     `;
@@ -28,7 +28,28 @@ function addLottery(lottery) {
 
     }
 }
-function registerToLottery(id) {
-    window.location.href="/registeringParticipant.html?lotteryId" + id;
-    //U have been succesfully registered to lottery with ID TROLOLOLO GOODLUCK
+function openRegistrationWindow(id) {
+    window.location.href="/registeringParticipant.html?lotteryId=" + id;
+}
+
+function addParticipantToLottery() {
+    const lotteryId = new URL(window.location.href).searchParams.get("lotteryId");
+    const email = document.getElementById("email").value;
+    const age = document.getElementById("age").value;
+    const code = document.getElementById("code").value;
+
+    fetch("/register", {
+        method: "post",
+            body: JSON.stringify({
+                lotteryId: lotteryId,
+                email: email,
+                age: age,
+                code: code
+            }),
+        headers:{
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    }).then(resp => resp.json());
+    alert("You have been successfully registered ");
+    window.location.href = "/availableLotteries.html"
 }
