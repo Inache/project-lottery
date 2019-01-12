@@ -29,8 +29,6 @@ function addLottery(lottery) {
     }
 }
 function registerToLottery(id) {
-
-    window.open("/registeringParticipant.html?lotteryId=" +id);
+    window.location.href="/registeringParticipant.html?lotteryId" + id;
     //U have been succesfully registered to lottery with ID TROLOLOLO GOODLUCK
-
 }

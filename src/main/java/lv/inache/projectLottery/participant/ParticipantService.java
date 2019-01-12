@@ -38,32 +38,21 @@ public class ParticipantService {
 
     public void registerParticipant(Participant participant) {
         Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLotteryId());
-
-
+        wrappedLottery.ifPresent(participant::setLottery);
         participantDao.insert(participant);
     }
-//    public void assignTask(Long userId, Long taskId) {
-//        Optional<User> wrappedUser = this.get(userId);
-//        Optional<Task> wrappedTask = tasksDAOImplementation.getById(taskId);
-//
-//        if (wrappedTask.isPresent() && wrappedUser.isPresent()) {
-//            User user = wrappedUser.get();
-//            user.getTasks().add(wrappedTask.get());
-//
-//            userDaoImplementation.update(user);
-//        }
-//    }
 
     public void update(Long id, Participant participant) {
         participant.setId(id);
         participantDao.update(participant);
     }
 
-    private String generateCode(){
+    private String generateCode() {
         //Generate8lastnumbers
         return "";
     }
-    private void sendCodeAtEmail(Participant participant, String code){
+
+    private void sendCodeAtEmail(Participant participant, String code) {
         //
     }
 }

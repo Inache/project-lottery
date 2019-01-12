@@ -1,6 +1,7 @@
 package lv.inache.projectLottery.participant;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lv.inache.projectLottery.lottery.Lottery;
 
@@ -16,29 +17,28 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private long id;
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     @NotBlank
     private String email;
     @Column(name = "age")
     private Byte age;
     @Column(name = "code", unique = true)
     private String code;
-    @Column(name = "lotteryId")
     private Long lotteryId;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
-//    @JsonIgnore
-    private List<Lottery> lotteries;
-
+    @ManyToOne
+    @JoinColumn(name = "lotteryId", insertable = false, updatable = false)
+    @JsonBackReference
+    private Lottery lottery;
 
     public Participant() {
     }
 
-    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId, List<Lottery> lotteries) {
+    public Participant(@NotBlank String email, Byte age, String code, Long lotteryId, Lottery lottery) {
         this.email = email;
         this.age = age;
         this.code = code;
         this.lotteryId = lotteryId;
-        this.lotteries = lotteries;
+        this.lottery = lottery;
     }
 
     @Override
@@ -51,13 +51,13 @@ public class Participant {
                 Objects.equals(age, that.age) &&
                 Objects.equals(code, that.code) &&
                 Objects.equals(lotteryId, that.lotteryId) &&
-                Objects.equals(lotteries, that.lotteries);
+                Objects.equals(lottery, that.lottery);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, age, code, lotteryId, lotteries);
+        return Objects.hash(id, email, age, code, lotteryId, lottery);
     }
 
     public long getId() {
@@ -100,11 +100,24 @@ public class Participant {
         this.lotteryId = lotteryId;
     }
 
-    public List<Lottery> getLotteries() {
-        return lotteries;
+    public Lottery getLottery() {
+        return lottery;
     }
 
-    public void setLotteries(List<Lottery> lotteries) {
-        this.lotteries = lotteries;
+    public void setLottery(Lottery lottery) {
+        this.lottery = lottery;
+    }
+
+    @Override
+    public String toString() {
+        return "Participant{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", code='" + code + '\'' +
+                ", lotteryId=" + lotteryId +
+                ", lottery=" + lottery +
+                '}';
     }
 }
+

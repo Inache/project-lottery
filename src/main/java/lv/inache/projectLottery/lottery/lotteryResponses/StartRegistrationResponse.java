@@ -5,14 +5,6 @@ public class StartRegistrationResponse {
     private Long id;
     private String reason;
 
-    public StartRegistrationResponse(String status, Long id) {
-        this.status = status;
-        this.id = id;
-    }
-    public StartRegistrationResponse(String status, String reason){
-        this.status = "Fail";
-        this.reason = reason;
-    }
 
 
     public String getStatus() {
