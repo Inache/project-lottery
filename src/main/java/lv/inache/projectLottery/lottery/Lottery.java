@@ -5,6 +5,7 @@ import lv.inache.projectLottery.participant.Participant;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,13 +30,16 @@ public class Lottery {
     private String winnerCode;
 
     @ManyToOne
-    @JoinColumn(name = "assigned_user_id")
+    @JoinColumn(name = "assigned_participant_id")
     private Participant participant;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
+//    @JsonIgnore
+    private List<Lottery> lotteries;
     public Lottery() {
     }
 
-    public Lottery(@NotBlank String title, Long participantsLimit, boolean registrationIsAvailable, Date startDate, Date endDate, String winnerCode, Participant participant) {
+    public Lottery(@NotBlank String title, Long participantsLimit, boolean registrationIsAvailable, Date startDate, Date endDate, String winnerCode, Participant participant, List<Lottery> lotteries) {
         this.title = title;
         this.participantsLimit = participantsLimit;
         this.registrationIsAvailable = registrationIsAvailable;
@@ -43,6 +47,7 @@ public class Lottery {
         this.endDate = endDate;
         this.winnerCode = winnerCode;
         this.participant = participant;
+        this.lotteries = lotteries;
     }
 
     public Long getId() {

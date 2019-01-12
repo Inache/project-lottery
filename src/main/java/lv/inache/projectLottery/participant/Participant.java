@@ -26,7 +26,7 @@ public class Participant {
     @Column(name = "lotteryId")
     private Long lotteryId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "participant")
-    @JsonIgnore
+//    @JsonIgnore
     private List<Lottery> lotteries;
 
 
