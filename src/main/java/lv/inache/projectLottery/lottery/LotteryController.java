@@ -35,12 +35,12 @@ public class LotteryController {
         lotteryService.startRegistration(lottery);
 
     }
-    @PutMapping(value = "/stop-registration/{id}")
+    @PostMapping(value = "/stop-registration/{id}")
     public void stopRegistration(@PathVariable Long id){
         LOGGER.info("stop-registration for lottery with id: " + id);
         lotteryService.stopRegistration(id);
     }
-    @PutMapping(value = "/choose-winner/{id}")
+    @PostMapping(value = "/choose-winner/{id}")
     public void chooseWinner(@PathVariable Long id){
         LOGGER.info("choose-winner");
         lotteryService.chooseWinnerCode(id);
@@ -59,7 +59,6 @@ public class LotteryController {
 
     @GetMapping(value = "/lotteries/{id}")
     public Optional<Lottery> getById(@PathVariable Long id){
-        System.out.println(lotteryService.get(id));
         return lotteryService.get(id);
     }
 }

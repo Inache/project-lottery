@@ -31,7 +31,7 @@ function addLottery(lottery) {
 
 function stopRegistration(id) {
     fetch("/stop-registration/" + id,{
-        method: "put",
+        method: "post",
         headers:{
             "Content-Type": "application/json;charset=UTF-8"
         }

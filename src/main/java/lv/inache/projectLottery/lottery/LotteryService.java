@@ -46,11 +46,19 @@ public class LotteryService {
     }
 
     public void chooseWinnerCode(Long id){
-        Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
+        Random random = new Random();
         Lottery lottery;
+        Integer randomWinner;
+        String winnersCode;
+        Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
         if (wrappedLottery.isPresent()){
             lottery = wrappedLottery.get();
-            Random random = new Random();
+            randomWinner = random.nextInt(lottery.getParticipants().size()) + 1;
+            winnersCode = lottery.getParticipants().get(randomWinner - 1).getCode();
+            lottery.setWinnerCode(winnersCode);
+            lotteryDao.update(lottery);
+
+
 
         }
 
