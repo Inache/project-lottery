@@ -5,24 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class LotteryService {
     private final LotteryDaoImplementation lotteryDao;
-    private final ParticipantDaoImplementation participantDao;
     private LotteryTitleValidator lotteryTitleValidator;
     private SimpleDateFormat simpleDateFormat;
 
     @Autowired
-    public LotteryService(LotteryDaoImplementation lotteryDao, ParticipantDaoImplementation participantDao) {
+    public LotteryService(LotteryDaoImplementation lotteryDao) {
         this.lotteryDao = lotteryDao;
-        this.participantDao = participantDao;
     }
-// TODO:Разобраться отдельно или нет создается и запускается лоттерея.
+//
 //    public void createLottery(Lottery lottery) {
 //        lotteryDao.insert(lottery);
 //    }
@@ -34,11 +29,9 @@ public class LotteryService {
 
         if (null == lottery.getTitle() || lottery.getTitle().isEmpty()) {
             return new LotteryResponse("Fail", "Title cant be empty");
-        }
-        else if (lotteryTitleValidator.checkIfTitleIsAlreadyUsed(lotteryDao,lottery)){
-            return new LotteryResponse("Fail","This title is already used");
-        }
-        else if (null == lottery.getParticipantsLimit() || lottery.getParticipantsLimit() <= 0) {
+        } else if (lotteryTitleValidator.checkIfTitleIsAlreadyUsed(lotteryDao, lottery)) {
+            return new LotteryResponse("Fail", "This title is already used");
+        } else if (null == lottery.getParticipantsLimit() || lottery.getParticipantsLimit() <= 0) {
             return new LotteryResponse("Fail", "Participants limit must be > 0");
         } else
 
@@ -46,8 +39,6 @@ public class LotteryService {
         lottery.setRegistrationIsAvailable(true);
         lotteryDao.insert(lottery);
         return new LotteryResponse("OK", lottery.getId());
-
-
     }
 
     public LotteryResponse stopRegistration(Long id) {
@@ -70,7 +61,7 @@ public class LotteryService {
         }
         return new LotteryResponse("Ok");
     }
-    //TODO: перепроверить этот метод всеми путями!
+
     public LotteryResponse chooseWinnerCode(Long id) {
         Random random = new Random();
         Lottery lottery;
@@ -82,11 +73,9 @@ public class LotteryService {
             lottery = wrappedLottery.get();
             if (lottery.isRegistrationIsAvailable()) {
                 return new LotteryResponse("Fail", "Lottery is not stopped");
-            }
-            else if (null != lottery.getWinnerCode() && !lottery.getWinnerCode().isEmpty()){
+            } else if (null != lottery.getWinnerCode() && !lottery.getWinnerCode().isEmpty()) {
                 return new LotteryResponse("Fail", "Lottery already have a winner");
-            }
-            else {
+            } else {
                 randomWinner = random.nextInt(lottery.getParticipants().size()) + 1;
                 winnersCode = lottery.getParticipants().get(randomWinner - 1).getCode();
                 lottery.setWinnerCode(winnersCode);
@@ -104,7 +93,6 @@ public class LotteryService {
             lotteryDao.delete(id, Lottery.class);
             return true;
         }
-
         return false;
     }
 
@@ -112,9 +100,12 @@ public class LotteryService {
         return lotteryDao.getAll();
     }
 
+    public void getStats(Lottery lottery) {
+        List<Integer> listForOutput = Collections.singletonList(lottery.getParticipants().size());
+
+    }
+
     public Optional<Lottery> get(Long id) {
         return lotteryDao.getById(id);
     }
-
-
 }

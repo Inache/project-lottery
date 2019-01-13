@@ -2,12 +2,10 @@ package lv.inache.projectLottery.participant;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lv.inache.projectLottery.lottery.Lottery;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.Objects;
 
 @Entity

@@ -20,7 +20,6 @@ public class LotteryResponse {
     }
 
     //Cheat to create constructor with same arguments
-
     public LotteryResponse(String status, String winnersCode, boolean cheat) {
         this.status = status;
         this.winnersCode = winnersCode;

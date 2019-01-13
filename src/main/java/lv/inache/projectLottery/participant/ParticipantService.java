@@ -27,7 +27,6 @@ public class ParticipantService {
         return participantDao.insert(participant);
     }
 
-
     public List<Participant> get() {
         return participantDao.getAll();
     }
@@ -45,7 +44,6 @@ public class ParticipantService {
         codeValidator = new CodeValidator();
         emailValidator = new EmailValidator();
 
-
         Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLotteryId());
         wrappedLottery.ifPresent(participant::setLottery);
 
@@ -61,8 +59,8 @@ public class ParticipantService {
             return new ParticipantResponse("Fail", "Your code must be from 8 digits");
         } else if (codeValidator.checkIfCodeIsAlreadyUsed(participantDao, participant)) {
             return new ParticipantResponse("Fail", "This code is already registered");
-        } else if (wrappedLottery.get().getParticipants().size() >= wrappedLottery.get().getParticipantsLimit()){
-            return new ParticipantResponse("Fail","Limit = participants,no more free places");
+        } else if (wrappedLottery.get().getParticipants().size() >= wrappedLottery.get().getParticipantsLimit()) {
+            return new ParticipantResponse("Fail", "Limit = participants,no more free places");
         }
         participantDao.insert(participant);
         return new ParticipantResponse("OK");
@@ -89,13 +87,6 @@ public class ParticipantService {
                 return new ParticipantResponse("LOOSE");
             }
         }
-
     }
-
-    public void update(Long id, Participant participant) {
-        participant.setId(id);
-        participantDao.update(participant);
-    }
-
 }
 

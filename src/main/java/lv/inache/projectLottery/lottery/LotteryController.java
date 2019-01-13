@@ -50,7 +50,6 @@ public class LotteryController {
     public Collection<Lottery> statistics() {
         LOGGER.info("Getting stats");
         return lotteryService.get();
-
     }
 
     @GetMapping(value = "/lotteries")

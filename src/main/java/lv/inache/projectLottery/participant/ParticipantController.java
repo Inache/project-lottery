@@ -5,7 +5,6 @@ import lv.inache.projectLottery.lottery.LotteryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -15,12 +14,10 @@ import java.util.Optional;
 @RestController
 public class ParticipantController {
     private final static Logger LOGGER = LoggerFactory.getLogger(ParticipantController.class);
-    private final LotteryService lotteryService;
     private final ParticipantService participantService;
 
     @Autowired
-    public ParticipantController(LotteryService lotteryService, ParticipantService participantService) {
-        this.lotteryService = lotteryService;
+    public ParticipantController(ParticipantService participantService) {
         this.participantService = participantService;
     }
 
@@ -34,8 +31,8 @@ public class ParticipantController {
     @GetMapping(value = "/status")
     public ParticipantResponse getStatus(@RequestParam("id") Long id,
                                          @RequestParam("email") String email,
-                                         @RequestParam ("code") String code) {
-        LOGGER.info("Getting status for lotteryID:" + id + ",email:" + email + ",participantsCode:"+code);
+                                         @RequestParam("code") String code) {
+        LOGGER.info("Getting status for lotteryID:" + id + ",email:" + email + ",participantsCode:" + code);
         return participantService.getStatus(id, email, code);
     }
 
