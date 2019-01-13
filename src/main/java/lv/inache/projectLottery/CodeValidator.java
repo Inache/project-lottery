@@ -6,5 +6,9 @@ public class CodeValidator {
 //            7 и 8 цифры - кол-во символов в емейле регистрирующегося. Т.е. если емейл as@df.gh, то должно быть 08. Если емейл test@mail.com - 13.
 //    Остальные 8 цифр, случайные
 //    Каждый код должен быть уникальным
-
+    public boolean checkLength(Integer length){
+        if (length == 8)
+            return true;
+        else return false;
+    }
 }

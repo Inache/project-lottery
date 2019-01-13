@@ -25,9 +25,9 @@ public class ParticipantController {
     }
 
     @PostMapping(value = "/register")
-    public void registerParticipant(@RequestBody Participant participant) {
+    public ParticipantResponse registerParticipant(@RequestBody Participant participant) {
         LOGGER.info("Registering participant");
-        participantService.registerParticipant(participant);
+        return participantService.registerParticipant(participant);
     }
     @GetMapping(value = "/status")
     public void getStatus(@RequestParam Long id, @RequestParam String email, @RequestParam String code){

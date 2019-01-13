@@ -1,5 +1,6 @@
 package lv.inache.projectLottery.participant;
 
+import lv.inache.projectLottery.CodeValidator;
 import lv.inache.projectLottery.lottery.Lottery;
 import lv.inache.projectLottery.lottery.LotteryDaoImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.util.*;
 public class ParticipantService {
     private final ParticipantDaoImplementation participantDao;
     private final LotteryDaoImplementation lotteryDao;
+    private CodeValidator codeValidator;
 
     @Autowired
     public ParticipantService(ParticipantDaoImplementation participantDao, LotteryDaoImplementation lotteryDao) {
@@ -36,10 +38,23 @@ public class ParticipantService {
     }
 
 
-    public void registerParticipant(Participant participant) {
+    public ParticipantResponse registerParticipant(Participant participant) {
+        codeValidator = new CodeValidator();
+
         Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLotteryId());
         wrappedLottery.ifPresent(participant::setLottery);
+        if (participant.getAge() < 21){
+            return new ParticipantResponse("Fail","Age must be >= 21 ");
+        }
+        else if (participant.getEmail().isEmpty() || participant.getAge() == null || participant.getCode().isEmpty()){
+            return new ParticipantResponse("Fail","You cant leave blank fields");
+        }
+        else if (!codeValidator.checkLength(participant.getCode().length()))
+        {
+            return new ParticipantResponse("Fail","Your code must be from 8 digits");
+        }
         participantDao.insert(participant);
+        return new ParticipantResponse("OK");
     }
 
     public void update(Long id, Participant participant) {
@@ -47,13 +62,5 @@ public class ParticipantService {
         participantDao.update(participant);
     }
 
-    private String generateCode() {
-        //Generate8lastnumbers
-        return "";
-    }
-
-    private void sendCodeAtEmail(Participant participant, String code) {
-        //
-    }
 }
 
