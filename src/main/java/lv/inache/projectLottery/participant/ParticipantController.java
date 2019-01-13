@@ -26,7 +26,7 @@ public class ParticipantController {
 
     @PostMapping(value = "/register")
     public void registerParticipant(@RequestBody Participant participant) {
-        LOGGER.info("register participant");
+        LOGGER.info("Registering participant");
         participantService.registerParticipant(participant);
     }
     @GetMapping(value = "/status")
@@ -36,12 +36,13 @@ public class ParticipantController {
 
     @GetMapping(value = "/participants")
     public Collection<Participant> get(){
-        LOGGER.info("Getting all lotteries");
+        LOGGER.info("Getting all participants");
         return participantService.get();
     }
 
     @GetMapping(value = "/participants/{id}")
     public Optional<Participant> getById(@PathVariable Long id){
+        LOGGER.info("Getting single participant with id: " + id);
         return participantService.get(id);
     }
 }

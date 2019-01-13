@@ -19,7 +19,6 @@ function addLottery(lottery) {
         <td>${lottery.startDate}</td>
         <td>${lottery.endDate}</td>
         <td>${lottery.winnerCode}</td>
-        <td>${lottery.assigned_participant_id}</td>
         <td>
        
         <button class="btn btn-primary" onclick="stopRegistration(${lottery.id})">STOP</button>
@@ -30,8 +29,11 @@ function addLottery(lottery) {
 }
 
 function stopRegistration(id) {
-    fetch("/stop-registration/" + id,{
+    fetch("/stop-registration",{
         method: "post",
+        body: JSON.stringify({
+            id: id
+        }),
         headers:{
             "Content-Type": "application/json;charset=UTF-8"
         }

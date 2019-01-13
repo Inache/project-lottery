@@ -1,6 +1,5 @@
 package lv.inache.projectLottery.lottery;
 
-import lv.inache.projectLottery.lottery.lotteryResponses.StartRegistrationResponse;
 import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,41 +24,62 @@ public class LotteryService {
 //        lotteryDao.insert(lottery);
 //    }
 
-    public void startRegistration(Lottery lottery) {
-        lottery.setStartDate(new Date());
+    public LotteryResponse startRegistration(Lottery lottery) {
+        if (lottery.getTitle().isEmpty()) {
+            return new LotteryResponse("Fail", "Title cant be empty");
+        } else if (lottery.getParticipantsLimit() <= 0) {
+            return new LotteryResponse("Fail", "Participants limit must be > 0");
+        } else
+            lottery.setStartDate(new Date());
         lottery.setRegistrationIsAvailable(true);
         lotteryDao.insert(lottery);
+        return new LotteryResponse("OK", lottery.getId());
+
 
     }
 
-    public void stopRegistration(Long id) {
+    public LotteryResponse stopRegistration(Long id) {
         Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
         Lottery lottery;
         if (wrappedLottery.isPresent()) {
             lottery = wrappedLottery.get();
+            if (!lottery.isRegistrationIsAvailable()) {
+                return new LotteryResponse("Fail", "Registration for lottery with id: " + id + " is already closed ");
+            } else if (lottery.getParticipants().isEmpty()) {
+                return new LotteryResponse("Fail", "Cant stop lottery with no participants");
+            }
             lottery.setRegistrationIsAvailable(false);
             lottery.setEndDate(new Date());
             lotteryDao.update(lottery);
         } else {
-            System.out.println("Lottery with " + id + "dont exist");
+            return new LotteryResponse("Fail", "Lottery with id: " + id + " doesn't exist");
         }
+        return new LotteryResponse("Ok");
     }
-
-    public void chooseWinnerCode(Long id){
+    //TODO: перепроверить этот метод всеми путями!
+    public LotteryResponse chooseWinnerCode(Long id) {
         Random random = new Random();
         Lottery lottery;
-        Integer randomWinner;
         String winnersCode;
+        Integer randomWinner;
         Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
-        if (wrappedLottery.isPresent()){
+        if (wrappedLottery.isPresent()) {
             lottery = wrappedLottery.get();
+
+            if (lottery.isRegistrationIsAvailable()) {
+                return new LotteryResponse("Fail", "Lottery is not stopped");
+            }
+            //TODO тут что-то ненравится nullpointerexception
+//            else if (lottery.getWinnerCode().isEmpty() || lottery.getWinnerCode() !=null){
+//                return new LotteryResponse("Fail", "Lottery already have a winner");
+//            }
             randomWinner = random.nextInt(lottery.getParticipants().size()) + 1;
             winnersCode = lottery.getParticipants().get(randomWinner - 1).getCode();
             lottery.setWinnerCode(winnersCode);
             lotteryDao.update(lottery);
-
-
-
+            return new LotteryResponse("OK", lottery.getWinnerCode(), true);
+        } else {
+            return new LotteryResponse("Fail", "Lottery with id: " + id + " does't exist");
         }
 
     }
@@ -90,19 +110,5 @@ public class LotteryService {
         return false;
     }
 
-//    public boolean addParticipant(Long lotteryId, Long participantId) {
-//        Optional<Lottery> wrappedLottery = this.get(lotteryId);
-//        Optional<Participant> wrappedParticipant = participantDao.getById(participantId);
-//
-//        if (wrappedLottery.isPresent() && wrappedParticipant.isPresent()) {
-//            Lottery lottery = wrappedLottery.get();
-//            lottery.setParticipants(wrappedParticipant.get());
-//
-//            this.update(lottery);
-//            return true;
-//        }
-//
-//        return false;
-//    }
 
 }

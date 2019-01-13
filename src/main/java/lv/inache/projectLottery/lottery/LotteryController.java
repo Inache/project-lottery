@@ -1,6 +1,5 @@
 package lv.inache.projectLottery.lottery;
 
-import lv.inache.projectLottery.lottery.lotteryResponses.StartRegistrationResponse;
 import lv.inache.projectLottery.participant.ParticipantController;
 import lv.inache.projectLottery.participant.ParticipantService;
 import org.slf4j.Logger;
@@ -30,35 +29,38 @@ public class LotteryController {
 //        LOGGER.info("Lottery" + lottery.getTitle() + "created.");
 //    }
     @PostMapping(value = "/start-registration")
-    public void startRegistration(@RequestBody Lottery lottery) {
-        LOGGER.info("start-registration");
-        lotteryService.startRegistration(lottery);
+    public LotteryResponse startRegistration(@RequestBody Lottery lottery) {
+        LOGGER.info("Lottery with title: " + lottery.getTitle() + " is created and opened for registration.");
+        return lotteryService.startRegistration(lottery);
+    }
 
+    @PostMapping(value = "/stop-registration")
+    public LotteryResponse stopRegistration(@RequestBody Lottery lottery) {
+        LOGGER.info("Stopping registration for lottery with id: " + lottery.getId());
+        return lotteryService.stopRegistration(lottery.getId());
     }
-    @PostMapping(value = "/stop-registration/{id}")
-    public void stopRegistration(@PathVariable Long id){
-        LOGGER.info("stop-registration for lottery with id: " + id);
-        lotteryService.stopRegistration(id);
+
+    @PostMapping(value = "/choose-winner")
+    public LotteryResponse chooseWinner(@RequestBody Lottery lottery) {
+        LOGGER.info("Choosing winner for lottery with id: " + lottery.getId());
+        return lotteryService.chooseWinnerCode(lottery.getId());
     }
-    @PostMapping(value = "/choose-winner/{id}")
-    public void chooseWinner(@PathVariable Long id){
-        LOGGER.info("choose-winner");
-        lotteryService.chooseWinnerCode(id);
-    }
+
     @GetMapping(value = "/stats")
-    public void statistics(@RequestBody Lottery lottery){
+    public void statistics(@RequestBody Lottery lottery) {
         LOGGER.info("Getting stats");
 
     }
 
     @GetMapping(value = "/lotteries")
-    public Collection<Lottery> getAllLotteries(){
+    public Collection<Lottery> getAllLotteries() {
         LOGGER.info("Getting all lotteries");
         return lotteryService.get();
     }
 
     @GetMapping(value = "/lotteries/{id}")
-    public Optional<Lottery> getById(@PathVariable Long id){
+    public Optional<Lottery> getById(@PathVariable Long id) {
+        LOGGER.info("Getting single lottery with id: " + id);
         return lotteryService.get(id);
     }
 }
