@@ -116,14 +116,5 @@ public class LotteryService {
         return lotteryDao.getById(id);
     }
 
-    public boolean update(Lottery newLottery) {
-        lotteryDao.update(newLottery);
-        return true;
-    }
-
-    public boolean assign(Long lotteryId, Long participantId) {
-        return false;
-    }
-
 
 }

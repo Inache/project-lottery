@@ -47,8 +47,9 @@ public class LotteryController {
     }
 
     @GetMapping(value = "/stats")
-    public void statistics(@RequestBody Lottery lottery) {
+    public Collection<Lottery> statistics() {
         LOGGER.info("Getting stats");
+        return lotteryService.get();
 
     }
 

@@ -29,19 +29,24 @@ public class ParticipantController {
         LOGGER.info("Registering participant");
         return participantService.registerParticipant(participant);
     }
-    @GetMapping(value = "/status")
-    public void getStatus(@RequestParam Long id, @RequestParam String email, @RequestParam String code){
 
+    //Пример запроса: GET localhost:8080/status?id=1&email=test@mail.com&code=1234567812345678
+    @GetMapping(value = "/status")
+    public ParticipantResponse getStatus(@RequestParam("id") Long id,
+                                         @RequestParam("email") String email,
+                                         @RequestParam ("code") String code) {
+        LOGGER.info("Getting status for lotteryID:" + id + ",email:" + email + ",participantsCode:"+code);
+        return participantService.getStatus(id, email, code);
     }
 
     @GetMapping(value = "/participants")
-    public Collection<Participant> get(){
+    public Collection<Participant> get() {
         LOGGER.info("Getting all participants");
         return participantService.get();
     }
 
     @GetMapping(value = "/participants/{id}")
-    public Optional<Participant> getById(@PathVariable Long id){
+    public Optional<Participant> getById(@PathVariable Long id) {
         LOGGER.info("Getting single participant with id: " + id);
         return participantService.get(id);
     }
