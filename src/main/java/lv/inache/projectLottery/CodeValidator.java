@@ -1,9 +1,12 @@
 package lv.inache.projectLottery;
 
+import lv.inache.projectLottery.lottery.Lottery;
+import lv.inache.projectLottery.lottery.LotteryDaoImplementation;
 import lv.inache.projectLottery.participant.Participant;
 import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CodeValidator {
     //    Код должен состоять из 16 цифр. Любые лругие символы не подходят
@@ -24,6 +27,14 @@ public class CodeValidator {
             }
         }
         return false;
+    }
+    public boolean ifCodeIsValid(Participant participant, LotteryDaoImplementation lotteryDao){
+        Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLottery().getId());
+        if (wrappedLottery.isPresent() && participant.getCode().length() == 16){
+            Lottery lottery = wrappedLottery.get();
+
+        }
+        return true;
     }
 
 }

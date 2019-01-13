@@ -49,7 +49,7 @@ public class LotteryController {
     @GetMapping(value = "/stats")
     public Collection<Lottery> statistics() {
         LOGGER.info("Getting stats");
-        return lotteryService.get();
+        return lotteryService.getStats();
     }
 
     @GetMapping(value = "/lotteries")

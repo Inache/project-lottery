@@ -1,6 +1,6 @@
 package lv.inache.projectLottery.lottery;
 
-import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
+import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,9 +100,8 @@ public class LotteryService {
         return lotteryDao.getAll();
     }
 
-    public void getStats(Lottery lottery) {
-        List<Integer> listForOutput = Collections.singletonList(lottery.getParticipants().size());
-
+    public Collection<Lottery> getStats() {
+        return lotteryDao.getAll();
     }
 
     public Optional<Lottery> get(Long id) {

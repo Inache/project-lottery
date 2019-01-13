@@ -1,6 +1,7 @@
 package lv.inache.projectLottery.lottery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lv.inache.projectLottery.participant.Participant;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "NCH_LOTTERIES")
 public class Lottery {
