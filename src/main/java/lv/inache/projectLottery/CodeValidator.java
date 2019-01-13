@@ -1,5 +1,10 @@
 package lv.inache.projectLottery;
 
+import lv.inache.projectLottery.participant.Participant;
+import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
+
+import java.util.List;
+
 public class CodeValidator {
 //    Код должен состоять из 16 цифр. Любые лругие символы не подходят
 //    Первые 6 цифр - дата стратра лотереи по формату DDMMYY. Т.е. если лотерея стартовала 27.12.2018 - первые 6 цифр должны быть 271218
@@ -7,8 +12,16 @@ public class CodeValidator {
 //    Остальные 8 цифр, случайные
 //    Каждый код должен быть уникальным
     public boolean checkLength(Integer length){
-        if (length == 8)
-            return true;
-        else return false;
+        return length == 8;
+    }
+    public boolean checkIfCodeIsAlreadyUsed(ParticipantDaoImplementation partDao,Participant participant){
+         List<Participant> participants = partDao.getAll();
+        for (int i = 0; i < participants.size(); i++) {
+            Participant p = participants.get(i);
+            if (participant.getCode().equals(p.getCode())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

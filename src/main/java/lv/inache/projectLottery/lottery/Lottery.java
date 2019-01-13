@@ -6,7 +6,6 @@ import lv.inache.projectLottery.participant.Participant;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +16,7 @@ public class Lottery {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", unique = true)
     private Long id;
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     @NotBlank
     private String title;
     @Column(name = "participantsLimit")
@@ -25,9 +24,9 @@ public class Lottery {
     @Column(name = "registrationIsAvailable")
     private boolean registrationIsAvailable;
     @Column(name = "startdate")
-    private Date startDate;
+    private String startDate;
     @Column(name = "enddate")
-    private Date endDate;
+    private String endDate;
     @Column(name = "winnerCode")
     private String winnerCode;
 
@@ -38,7 +37,7 @@ public class Lottery {
     public Lottery() {
     }
 
-    public Lottery(@NotBlank String title, Long participantsLimit, boolean registrationIsAvailable, Date startDate, Date endDate, String winnerCode) {
+    public Lottery(@NotBlank String title, Long participantsLimit, boolean registrationIsAvailable, String startDate, String endDate, String winnerCode) {
         this.title = title;
         this.participantsLimit = participantsLimit;
         this.registrationIsAvailable = registrationIsAvailable;
@@ -113,19 +112,19 @@ public class Lottery {
         this.registrationIsAvailable = registrationIsAvailable;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

@@ -4,6 +4,7 @@ import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ import java.util.Random;
 public class LotteryService {
     private final LotteryDaoImplementation lotteryDao;
     private final ParticipantDaoImplementation participantDao;
+    private LotteryTitleValidator lotteryTitleValidator;
+    private SimpleDateFormat simpleDateFormat;
 
     @Autowired
     public LotteryService(LotteryDaoImplementation lotteryDao, ParticipantDaoImplementation participantDao) {
@@ -25,12 +28,21 @@ public class LotteryService {
 //    }
 
     public LotteryResponse startRegistration(Lottery lottery) {
-        if (lottery.getTitle().isEmpty()) {
+        lotteryTitleValidator = new LotteryTitleValidator();
+        simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date formattedStartDate = new Date();
+
+        if (null == lottery.getTitle() || lottery.getTitle().isEmpty()) {
             return new LotteryResponse("Fail", "Title cant be empty");
-        } else if (lottery.getParticipantsLimit() <= 0) {
+        }
+        else if (lotteryTitleValidator.checkIfTitleIsAlreadyUsed(lotteryDao,lottery)){
+            return new LotteryResponse("Fail","This title is already used");
+        }
+        else if (null == lottery.getParticipantsLimit() || lottery.getParticipantsLimit() <= 0) {
             return new LotteryResponse("Fail", "Participants limit must be > 0");
         } else
-            lottery.setStartDate(new Date());
+
+            lottery.setStartDate(simpleDateFormat.format(formattedStartDate));
         lottery.setRegistrationIsAvailable(true);
         lotteryDao.insert(lottery);
         return new LotteryResponse("OK", lottery.getId());
@@ -39,6 +51,8 @@ public class LotteryService {
     }
 
     public LotteryResponse stopRegistration(Long id) {
+        simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date formattedEndDate = new Date();
         Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
         Lottery lottery;
         if (wrappedLottery.isPresent()) {
@@ -49,7 +63,7 @@ public class LotteryService {
                 return new LotteryResponse("Fail", "Cant stop lottery with no participants");
             }
             lottery.setRegistrationIsAvailable(false);
-            lottery.setEndDate(new Date());
+            lottery.setEndDate(simpleDateFormat.format(formattedEndDate));
             lotteryDao.update(lottery);
         } else {
             return new LotteryResponse("Fail", "Lottery with id: " + id + " doesn't exist");
@@ -63,21 +77,22 @@ public class LotteryService {
         String winnersCode;
         Integer randomWinner;
         Optional<Lottery> wrappedLottery = lotteryDao.getById(id);
+
         if (wrappedLottery.isPresent()) {
             lottery = wrappedLottery.get();
-
             if (lottery.isRegistrationIsAvailable()) {
                 return new LotteryResponse("Fail", "Lottery is not stopped");
             }
-            //TODO тут что-то ненравится nullpointerexception
-//            else if (lottery.getWinnerCode().isEmpty() || lottery.getWinnerCode() !=null){
-//                return new LotteryResponse("Fail", "Lottery already have a winner");
-//            }
-            randomWinner = random.nextInt(lottery.getParticipants().size()) + 1;
-            winnersCode = lottery.getParticipants().get(randomWinner - 1).getCode();
-            lottery.setWinnerCode(winnersCode);
-            lotteryDao.update(lottery);
-            return new LotteryResponse("OK", lottery.getWinnerCode(), true);
+            else if (null != lottery.getWinnerCode() && !lottery.getWinnerCode().isEmpty()){
+                return new LotteryResponse("Fail", "Lottery already have a winner");
+            }
+            else {
+                randomWinner = random.nextInt(lottery.getParticipants().size()) + 1;
+                winnersCode = lottery.getParticipants().get(randomWinner - 1).getCode();
+                lottery.setWinnerCode(winnersCode);
+                lotteryDao.update(lottery);
+                return new LotteryResponse("OK", lottery.getWinnerCode(), true);
+            }
         } else {
             return new LotteryResponse("Fail", "Lottery with id: " + id + " does't exist");
         }

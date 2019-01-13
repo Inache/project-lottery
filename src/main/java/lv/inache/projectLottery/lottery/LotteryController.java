@@ -30,7 +30,7 @@ public class LotteryController {
 //    }
     @PostMapping(value = "/start-registration")
     public LotteryResponse startRegistration(@RequestBody Lottery lottery) {
-        LOGGER.info("Lottery with title: " + lottery.getTitle() + " is created and opened for registration.");
+        LOGGER.info("Starting lottery");
         return lotteryService.startRegistration(lottery);
     }
 
