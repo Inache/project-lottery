@@ -1,9 +1,10 @@
 package lv.inache.projectLottery.participant;
 
-import lv.inache.projectLottery.CodeValidator;
-import lv.inache.projectLottery.EmailValidator;
 import lv.inache.projectLottery.lottery.Lottery;
 import lv.inache.projectLottery.lottery.LotteryDaoImplementation;
+import lv.inache.projectLottery.participant.validators.CodeValidator;
+import lv.inache.projectLottery.participant.validators.EmailValidator;
+import lv.inache.projectLottery.participant.validators.ParticipantExistenceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

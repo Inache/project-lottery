@@ -1,35 +1,35 @@
 function loadLotteries() {
-    fetch("/lotteries",{
+    fetch("/lotteries", {
         method: "get"
     }).then(resp => resp.json()
-    ).then(lotteries =>{
-        for (const lottery of lotteries){
+    ).then(lotteries => {
+        for (const lottery of lotteries) {
             addLottery(lottery);
         }
     });
 }
 
 function addLottery(lottery) {
-    if (lottery.registrationIsAvailable == true) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
         <td>${lottery.id}</td>
         <td>${lottery.title}</td>
-        <td>${lottery.participantsLimit}</td>
         <td>
        
         <button class="btn btn-primary" onclick="openRegistrationWindow(${lottery.id})">Register To Lottery</button>
-    
+                <button class="btn btn-primary" onclick="checkParticipantStatusWindow(${lottery.id})">Check status</button>
+
         </td>
     `;
-        document.getElementById("table-body").appendChild(tr);
-    }
-    else {
-
-    }
+    document.getElementById("table-body").appendChild(tr);
 }
+
 function openRegistrationWindow(id) {
-    window.location.href="/registeringParticipant.html?lotteryId=" + id;
+    window.location.href = "/registeringParticipant.html?lotteryId=" + id;
+}
+
+function checkParticipantStatusWindow(id) {
+    window.location.href = "/status.html?lotteryId=" + id;
 }
 
 function addParticipantToLottery() {
@@ -40,16 +40,49 @@ function addParticipantToLottery() {
 
     fetch("/register", {
         method: "post",
-            body: JSON.stringify({
-                lotteryId: lotteryId,
-                email: email,
-                age: age,
-                code: code
-            }),
-        headers:{
+        body: JSON.stringify({
+            lotteryId: lotteryId,
+            email: email,
+            age: age,
+            code: code
+        }),
+        headers: {
             "Content-Type": "application/json;charset=UTF-8"
         }
-    }).then(resp => resp.json());
-    alert("You have been successfully registered ");
-    window.location.href = "/availableLotteries.html"
+    }).then((resp) => resp.json())
+        .then(response => {
+            if (response.status == "OK") {
+                alert("You have been succesfully registered.");
+                window.location.href = "/availableLotteries.html";
+            }
+            else {
+                alert("Cant register" + response.reason);
+                window.location.reload();
+            }
+        })
+}
+
+function checkParticipantsStatus() {
+    const lotteryId = new URL(window.location.href).searchParams.get("lotteryId");
+    const email = document.getElementById("email").value;
+    const code = document.getElementById("code").value;
+
+    fetch("/status?id=" + lotteryId + "&email=" + email + "&code=" + code, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    }).then((resp) => resp.json())
+        .then(response => {
+            if (response.status == "WIN") {
+                alert("WIN");
+            } else if (response.status == "LOOSE") {
+                alert("LOOSE");
+            } else if (response.status == "PENDING") {
+                alert("PENDING");
+            } else {
+                alert("ERROR");
+            }
+        })
+
 }

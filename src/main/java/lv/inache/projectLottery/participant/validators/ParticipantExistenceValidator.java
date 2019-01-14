@@ -1,4 +1,4 @@
-package lv.inache.projectLottery.participant;
+package lv.inache.projectLottery.participant.validators;
 
 import lv.inache.projectLottery.lottery.Lottery;
 import lv.inache.projectLottery.lottery.LotteryDaoImplementation;

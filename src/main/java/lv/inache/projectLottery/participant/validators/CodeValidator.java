@@ -1,4 +1,4 @@
-package lv.inache.projectLottery;
+package lv.inache.projectLottery.participant.validators;
 
 import lv.inache.projectLottery.lottery.Lottery;
 import lv.inache.projectLottery.lottery.LotteryDaoImplementation;
@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 public class CodeValidator {
     //    Код должен состоять из 16 цифр. Любые лругие символы не подходят
@@ -18,7 +17,7 @@ public class CodeValidator {
 //    Остальные 8 цифр, случайные
 //    Каждый код должен быть уникальным
     public boolean checkLength(Integer length) {
-        return length == 8;
+        return length == 16;
     }
 
     public boolean checkIfCodeIsAlreadyUsed(ParticipantDaoImplementation partDao, Participant participant) {
@@ -37,22 +36,22 @@ public class CodeValidator {
         Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLottery().getId());
         if (wrappedLottery.isPresent() && participant.getCode().length() == 16 && participant.getCode().matches(regex)) {
             Lottery lottery = wrappedLottery.get();
-            System.out.println("Hello World!");
             String email = participant.getEmail();
             String tmpDate = lottery.getStartDate();
-            StringBuilder dateBuilder = new StringBuilder(tmpDate);
+            String tmpDate2 = tmpDate.replaceAll("[^0-9]", "");
+            //Не проверил что будет если день будет начинаться не с 2ух цифр...
+            StringBuilder dateBuilder = new StringBuilder(tmpDate2);
             dateBuilder.delete(4, 6);
             dateBuilder.delete(6, 10);
             String datePart = dateBuilder.toString();
             String emailPart;
-            if (email.length() < 10) {
+            if (participant.getEmail().length() < 10) {
                 emailPart = "0" + email.length();
             } else {
                 emailPart = "" + email.length();
             }
             String validFirstPartOfTheCode = datePart + emailPart;
             String participantsFirstPathOfTheCode = participant.getCode().substring(0, 8);
-
             return validFirstPartOfTheCode.equals(participantsFirstPathOfTheCode);
         }
         return false;

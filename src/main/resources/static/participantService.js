@@ -36,4 +36,5 @@ function createParticipant() {
     }).then(() => {
         window.location.href = "/participants.html";
     });
+
 }

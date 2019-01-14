@@ -1,4 +1,4 @@
-package lv.inache.projectLottery;
+package lv.inache.projectLottery.participant.validators;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
