@@ -22,12 +22,6 @@ public class LotteryController {
         this.participantService = participantService;
     }
 
-    //    @PostMapping(value = "/create-lottery")
-//    public void createLottery(@RequestBody Lottery lottery){
-//        LOGGER.info("Creating lottery");
-//        lotteryService.createLottery(lottery);
-//        LOGGER.info("Lottery" + lottery.getTitle() + "created.");
-//    }
     @PostMapping(value = "/start-registration")
     public LotteryResponse startRegistration(@RequestBody Lottery lottery) {
         LOGGER.info("Starting lottery");
@@ -62,5 +56,11 @@ public class LotteryController {
     public Optional<Lottery> getById(@PathVariable Long id) {
         LOGGER.info("Getting single lottery with id: " + id);
         return lotteryService.get(id);
+    }
+
+    @GetMapping(value = "/lotteries/count/{id}")
+    public Integer getParticipantsCount(@PathVariable Long id) {
+        LOGGER.info("Getting participants count from lottery with id" + id);
+        return lotteryService.getParticipantsCount(id);
     }
 }

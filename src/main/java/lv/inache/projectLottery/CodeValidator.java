@@ -5,8 +5,11 @@ import lv.inache.projectLottery.lottery.LotteryDaoImplementation;
 import lv.inache.projectLottery.participant.Participant;
 import lv.inache.projectLottery.participant.ParticipantDaoImplementation;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class CodeValidator {
     //    Код должен состоять из 16 цифр. Любые лругие символы не подходят
@@ -28,13 +31,31 @@ public class CodeValidator {
         }
         return false;
     }
-    public boolean ifCodeIsValid(Participant participant, LotteryDaoImplementation lotteryDao){
-        Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLottery().getId());
-        if (wrappedLottery.isPresent() && participant.getCode().length() == 16){
-            Lottery lottery = wrappedLottery.get();
 
+    public boolean ifCodeIsValid(Participant participant, LotteryDaoImplementation lotteryDao) {
+        String regex = "\\d+";
+        Optional<Lottery> wrappedLottery = lotteryDao.getById(participant.getLottery().getId());
+        if (wrappedLottery.isPresent() && participant.getCode().length() == 16 && participant.getCode().matches(regex)) {
+            Lottery lottery = wrappedLottery.get();
+            System.out.println("Hello World!");
+            String email = participant.getEmail();
+            String tmpDate = lottery.getStartDate();
+            StringBuilder dateBuilder = new StringBuilder(tmpDate);
+            dateBuilder.delete(4, 6);
+            dateBuilder.delete(6, 10);
+            String datePart = dateBuilder.toString();
+            String emailPart;
+            if (email.length() < 10) {
+                emailPart = "0" + email.length();
+            } else {
+                emailPart = "" + email.length();
+            }
+            String validFirstPartOfTheCode = datePart + emailPart;
+            String participantsFirstPathOfTheCode = participant.getCode().substring(0, 8);
+
+            return validFirstPartOfTheCode.equals(participantsFirstPathOfTheCode);
         }
-        return true;
+        return false;
     }
 
 }

@@ -1,6 +1,5 @@
 package lv.inache.projectLottery.lottery;
 
-import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +16,7 @@ public class LotteryService {
     public LotteryService(LotteryDaoImplementation lotteryDao) {
         this.lotteryDao = lotteryDao;
     }
-//
-//    public void createLottery(Lottery lottery) {
-//        lotteryDao.insert(lottery);
-//    }
+
 
     public LotteryResponse startRegistration(Lottery lottery) {
         lotteryTitleValidator = new LotteryTitleValidator();
@@ -106,5 +102,9 @@ public class LotteryService {
 
     public Optional<Lottery> get(Long id) {
         return lotteryDao.getById(id);
+    }
+
+    public Integer getParticipantsCount(Long id) {
+        return lotteryDao.getById(id).get().getParticipants().size();
     }
 }

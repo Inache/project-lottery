@@ -75,4 +75,6 @@ public abstract class BaseDaoImplementation<T> implements BaseDao<T> {
         tx.commit();
         session.close();
     }
+
+
 }

@@ -39,7 +39,7 @@ public class ParticipantService {
         participantDao.delete(id);
     }
 
-    //TODO:Валидатор кода!?!?!?!?!
+
     public ParticipantResponse registerParticipant(Participant participant) {
         codeValidator = new CodeValidator();
         emailValidator = new EmailValidator();
@@ -56,12 +56,15 @@ public class ParticipantService {
         } else if (!emailValidator.checkEmail(participant.getEmail())) {
             return new ParticipantResponse("Fail", "Invalid email");
         } else if (!codeValidator.checkLength(participant.getCode().length()) || participant.getCode().isEmpty()) {
-            return new ParticipantResponse("Fail", "Your code must be from 8 digits");
+            return new ParticipantResponse("Fail", "Your code must be from 16 digits");
         } else if (codeValidator.checkIfCodeIsAlreadyUsed(participantDao, participant)) {
             return new ParticipantResponse("Fail", "This code is already registered");
         } else if (wrappedLottery.get().getParticipants().size() >= wrappedLottery.get().getParticipantsLimit()) {
             return new ParticipantResponse("Fail", "Limit = participants,no more free places");
+        } else if (!codeValidator.ifCodeIsValid(participant, lotteryDao)) {
+            return new ParticipantResponse("Fail", "First part of the code dont match");
         }
+
         participantDao.insert(participant);
         return new ParticipantResponse("OK");
     }
